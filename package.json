@@ -1,0 +1,47 @@
+{
+  "name": "napi-js",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Library for downloading movie subtitles using NapiProjekt API.",
+  "homepage": "https://github.com/kozervar/napis-js",
+  "author": "Marcin Kozaczyk <kozervar@gmail.com> (http://github.com/kozervar)",
+  "keywords": [
+    "napiprojekt",
+    "napiproject",
+    "js",
+    "javascript",
+    "napi",
+    "project",
+    "promise",
+    "node"
+  ],
+  "contributors": [
+    "Marcin Kozaczyk <kozervar@gmail.com> (http://github.com/kozervar)"
+  ],
+  "bugs": {
+    "mail": "kozervar@gmail.com",
+    "url": "http://github.com/kozervar/napis-js/issues"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "http://github.com/kozervar/napis-js/raw/master/LICENSE"
+  },
+  "main": "napi-js.js",
+  "files": [
+    "LICENSE",
+    "napi-js.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kozervar/napis-js.git"
+  },
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "md5-part-file": "^1.0.3",
+    "q": "^1.3.0",
+    "xml2js": "^0.4.8"
+  }
+}
