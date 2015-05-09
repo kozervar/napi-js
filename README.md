@@ -1,7 +1,7 @@
 Napi-js
 =====
 
-Node.js library for downloading movie subtitles using NapiProjekt API.
+Node.js library for downloading movie subtitles using [NapiProjekt](http://www.napiprojekt.pl/) API.
 
 Usage
 --------
@@ -24,6 +24,8 @@ Next just do something like that:
     );
 
 Napi-js use [promises](https://github.com/kriskowal/q).
+
+Subtitles are save under this same name and directory as movie file but with _.txt_ extension.
 
 License
 --------
