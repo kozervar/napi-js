@@ -3,25 +3,26 @@ Napi-js
 
 Node.js library for downloading movie subtitles using [NapiProjekt](http://www.napiprojekt.pl/) API.
 
-Usage
---------
-
-    node install napi-js
+## Usage
+```bash
+> npm install napi-js
+```
 
 Next just do something like that:
 
+```javascript
+var napijs = require('../napi-js');
 
-    var napijs = require('../napi-js');
-
-    napijs.downloadSubtitles('MY_MOVIE.mkv', napijs.LANGUAGE.POLISH).then(function (obj) {
-            console.log(obj);
-        }, function (err) {
-            console.error(err);
-        },
-        function (progress) {
-            console.info(progress);
-        }
-    );
+napijs.downloadSubtitles('MY_MOVIE.mkv', napijs.LANGUAGE.POLISH).then(function (obj) {
+        console.log(obj);
+    }, function (err) {
+        console.error(err);
+    },
+    function (progress) {
+        console.info(progress);
+    }
+);
+```
 
 Napi-js use [promises](https://github.com/kriskowal/q).
 
