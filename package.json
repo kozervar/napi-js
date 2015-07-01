@@ -32,7 +32,8 @@
   "main": "napi-js.js",
   "files": [
     "LICENSE",
-    "napi-js.js"
+    "napi-js.js",
+	"bin/*"
   ],
   "repository": {
     "type": "git",
