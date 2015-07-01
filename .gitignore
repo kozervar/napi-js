@@ -1,3 +1,7 @@
+# disable example video and downloaded subtitles
+*.mp4
+*.txt
+
 # Created by https://www.gitignore.io
 
 ### Intellij ###
