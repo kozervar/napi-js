@@ -17,18 +17,18 @@ function downloadSubtitles(fileName, language) {
     var deferred = Q.defer();
 
     if (!fileName) {
-        deferred.reject('File name is missing');
+        deferred.reject('Missing file name.');
         return deferred.promise;
     }
     if (!language) {
-        deferred.reject('Language is missing');
+        deferred.reject('Missing language.');
         return deferred.promise;
     }
 
     fs.stat(fileName, function (err) {
         if (err) {
             if (err.code === 'ENOENT') {
-                deferred.reject('Such a file does not exist.');
+                deferred.reject('File does not exist.');
             } else {
                 deferred.reject(err);
             }
@@ -36,7 +36,7 @@ function downloadSubtitles(fileName, language) {
             deferred.notify('Generating hash for file ' + fileName);
             md5pf(fileName, 0, 10485760, function (err, hash) {
                 if (err) {
-                    deferred.reject('Something went wrong during md5 hash calculation of partial file.');
+                    deferred.reject('Something went wrong during md5 hash calculation.');
                 } else {
                     deferred.notify('Hash: ' + hash);
 
@@ -61,7 +61,7 @@ function downloadSubtitles(fileName, language) {
                     };
                     var req = http.request(post_options, function (res) {
                         res.setEncoding('utf-8');
-                        deferred.notify('Response from server received');
+                        deferred.notify('Response from server received.');
                         deferred.notify('Downloading...');
 
                         var responseString = '';
@@ -85,7 +85,7 @@ function downloadSubtitles(fileName, language) {
                                                 path.dirname(fileName),
                                                 path.basename(fileName, path.extname(fileName)) + '.txt'
                                             );
-                                            deferred.notify('Saving file ' + subsFileName);
+                                            deferred.notify('Saving file: ' + subsFileName);
                                             var file = fs.createWriteStream(subsFileName);
                                             var subs = result.result.subtitles[0];
 
@@ -95,20 +95,20 @@ function downloadSubtitles(fileName, language) {
                                                 deferred.reject(err);
                                             });
                                             file.on('finish', function () {
-                                                deferred.notify('File saved successfully');
+                                                deferred.notify('File saved successfully.');
                                                 file.close(function () {
                                                     deferred.resolve(subsFileName);
                                                 });
                                             });
                                             file.end();
                                         } else {
-                                            deferred.reject('Wrong number of subtitles');
+                                            deferred.reject('Wrong number of subtitles.');
                                         }
                                     } else {
-                                        deferred.reject('No subtitles in result');
+                                        deferred.reject('No subtitles in reponse.');
                                     }
                                 } else {
-                                    deferred.reject('No result');
+                                    deferred.reject('No response.');
                                 }
                             });
                         });
