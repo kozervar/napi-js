@@ -5,6 +5,7 @@
   "description": "A library for downloading movie subtitles using the NapiProjekt API.",
   "homepage": "https://github.com/kozervar/napi-js",
   "author": "Marcin Kozaczyk <kozervar@gmail.com> (http://github.com/kozervar)",
+  "license": "MIT",
   "keywords": [
     "napiprojekt",
     "napiproject",
@@ -22,10 +23,7 @@
     "mail": "kozervar@gmail.com",
     "url": "http://github.com/kozervar/napi-js/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "http://github.com/kozervar/napi-js/raw/master/LICENSE"
-  },
+
   "bin": {
     "napijs": "./bin/cmd.js"
   },
@@ -33,7 +31,7 @@
   "files": [
     "LICENSE",
     "napi-js.js",
-	"bin/*"
+    "bin/*"
   ],
   "repository": {
     "type": "git",
