@@ -2,7 +2,7 @@
 
 var napijs = require('../napi-js');
 
-napijs({files: ['/home/kozervar/Downloads/*.mkv']}).then(function (subFileNames) {
+napijs({files: ['*.mkv']}).then(function (subFileNames) {
         console.log(subFileNames);
     }, function (err) {
         console.error(err);

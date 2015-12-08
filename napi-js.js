@@ -12,6 +12,11 @@ var
     xml2js = require('xml2js'),
     md5pf = require('md5-part-file');
 
+/**
+ * Checking if provided language exists in available languages. Default lang: PL
+ * @param  {string} language Language
+ * @return {string}          Language
+ */
 function checkLanguage(language) {
     for (var id in LANGUAGE) {
         if (LANGUAGE[id] === language) {
@@ -20,15 +25,25 @@ function checkLanguage(language) {
     }
     return false;
 }
-
+/**
+ * Check the provided options object
+ * @param  {object} options Options object
+ * @return {object}          Options object
+ */
 function checkOptions(options) {
     var o = (!options) ? {} : options;
     o.caseSensitive = _.isArray(o.files) ? false : true;
     o.files = _.isArray(o.files) ? o.files : ['*.mkv', '*.avi', '*.mp4'];
     o.language = checkLanguage(o.language) ? o.language : LANGUAGE.POLISH;
+    o.verbose = options.verbose ? true : false;
     return o;
 }
 
+/**
+ * Returns hash of the provided file
+ * @param  {string} file File name
+ * @return {promise}      promise
+ */
 function getHash(file) {
     var deffered = Q.defer();
     md5pf(file, 0, 10485760, function (err, hash) {
@@ -44,8 +59,13 @@ function getHash(file) {
     return deffered.promise;
 }
 
+/**
+ * Creates napiprojekt HTTP-request
+ * @param  {object} options      Options
+ * @param  {object} fileWithHash Object wtih filename and hash
+ * @return {promise}              promise
+ */
 function getHttpRequest(options, fileWithHash) {
-    console.log('Downloading subtitles for file ', fileWithHash.file);
     var deffered = Q.defer();
     var postData = querystring.stringify({
         'downloaded_subtitles_lang': options.language,
@@ -79,6 +99,12 @@ function getHttpRequest(options, fileWithHash) {
     return deffered.promise;
 }
 
+/**
+ * Process the napiprojekt HTTP-request response
+ * @param  {object} fileWithHash Object wtih filename and hash
+ * @param  {deffered} deffered     HTTP request deffered
+ * @param  {object} res          HTTP request response object
+ */
 function processResponse(fileWithHash, deffered, res) {
     res.setEncoding('utf-8');
     var responseString = '';
@@ -92,6 +118,12 @@ function processResponse(fileWithHash, deffered, res) {
     });
 }
 
+/**
+ * Transforms XML response to JSON, saves the subtitles and then
+ * returns subtitles file name.
+ * @param  {object} response Napiprojekt response
+ * @return {promise}          promise
+ */
 function getJSONFromXML(response) {
     var deffered = Q.defer();
     xml2js.parseString(response.responseString, function (err, result) {
@@ -122,20 +154,27 @@ function getJSONFromXML(response) {
                     });
                     file.end();
                 } else {
-                    deffered.reject('Wrong number of subtitles.');
+                    deffered.notify('Wrong number of subtitles.');
+                    deffered.resolve();
                 }
             } else {
-                deffered.reject('No subtitles in reponse.');
+                deffered.notify('No subtitles in reponse.');
+                deffered.resolve();
             }
         } else {
-            deffered.reject('No response.');
+            deffered.notify('No response.');
+            deffered.resolve();
         }
     });
     return deffered.promise;
 }
 
+/**
+ * Downloads subtitle for provided files. Main function.
+ * @param  {object} options Options
+ * @return {promise}         promise
+ */
 function downloadSubtitles(options) {
-
     var o = checkOptions(options);
     var finalDeffer = Q.defer();
     var d = Q.defer();
@@ -151,14 +190,15 @@ function downloadSubtitles(options) {
             return d.promise;
         })
         .then(function (files) {
-            console.info('Movie files: ', files);
+            if (options.verbose)
+                console.info('Available files: ', files);
             var p = [];
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 p.push(getHash(file));
             }
-            if(p.length == 0) {
-              finalDeffer.resolve([]);
+            if (p.length == 0) {
+                finalDeffer.resolve([]);
             }
             return Q.all(p);
         })
@@ -166,10 +206,12 @@ function downloadSubtitles(options) {
             var p = [];
             for (var i = 0; i < filesWithHash.length; i++) {
                 var fileWithHash = filesWithHash[i];
+                if (options.verbose)
+                    console.log('Downloading subtitles for file ', fileWithHash.file);
                 p.push(getHttpRequest(o, fileWithHash));
             }
-            if(p.length == 0) {
-              finalDeffer.resolve([]);
+            if (p.length == 0) {
+                finalDeffer.resolve([]);
             }
             return Q.all(p);
         })
@@ -183,15 +225,21 @@ function downloadSubtitles(options) {
                 var fileWithHashAndContent = results[i];
                 p.push(getJSONFromXML(fileWithHashAndContent));
             }
-            if(p.length == 0) {
-              finalDeffer.resolve([]);
+            if (p.length == 0) {
+                finalDeffer.resolve([]);
             }
             return Q.all(p);
         })
         .then(function (subFileNames) {
+            subFileNames = _.remove(subFileNames, undefined);
+            if (options.verbose)
+                for (var i = 0; i < subFileNames.length; i++) {
+                    console.log('Subtitles downloaded: ', subFileNames[i]);
+                }
             finalDeffer.resolve(subFileNames);
         })
         .catch(function (err) {
+            console.error(err);
             finalDeffer.reject(err);
         });
     return finalDeffer.promise;
