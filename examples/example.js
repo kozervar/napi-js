@@ -2,8 +2,8 @@
 
 var napijs = require('../napi-js');
 
-napijs.downloadSubtitles('MY_MOVIE.mkv', napijs.LANGUAGE.POLISH).then(function (obj) {
-        console.log(obj);
+napijs({files: ['/home/kozervar/Downloads/*.mkv']}).then(function (subFileNames) {
+        console.log(subFileNames);
     }, function (err) {
         console.error(err);
     },

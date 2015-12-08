@@ -2,20 +2,10 @@
 'use strict';
 
 var napijs = require('./..');
+var minimist = require('minimist');
 
-var fileName = process.argv[2];
+// var fileName = process.argv[2];
 
-if (!fileName) {
-  console.log('Not enough parameters. Usage:');
-  console.log('> napijs path/to/file');
-  return;
-}
-napijs.downloadSubtitles(fileName, napijs.LANGUAGE.POLISH).then(function (obj) {
-        console.log(obj);
-    }, function (err) {
-        console.error(err);
-    },
-    function (progress) {
-        console.info(progress);
-    }
-);
+console.log(minimist(process.argv.slice(2)))
+
+napijs();
