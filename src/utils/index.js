@@ -7,3 +7,5 @@ export {default as hash} from './Hash';
 export {default as glob} from './Glob';
 export {default as HttpRequest} from './HttpRequest';
 export {default as XML2JSON} from './XML2JSON';
+export {default as fileManager} from './FileManager';
+export {default as fileWatcher} from './FileWatcher';

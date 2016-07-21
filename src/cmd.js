@@ -31,17 +31,30 @@ var argv = yargs.usage('$0 <cmd> [args]')
         alias: 'files',
         default: ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg']
     })
+    .option('file', {
+        array: false,
+        description: 'Single file'
+    })
+    .option('o', {
+        description: 'Overwrite subtitle file if one exists',
+        alias: 'overwrite',
+        default: true
+    })
     .example('napijs -f "**.mkv" ', 'Search subtitles for movies with .mkv extension in current folder')
     .example('napijs -f "**/*.avi" ', 'Search subtitles for movies with .avi extension in current folder and subfolders.')
     .example('napijs -f "**.mkv" "**/*.avi" ', 'This same but in one line.')
     .epilog('For more information visit https://github.com/kozervar/napi-js')
     .argv;
 
-napijs(new NapijsOptions(argv))
-    .then(()=>{
-        return 1;
-    })
-    .catch((err)=>{
-        console.error('Error occurred: ', err);
-        return -1;
-    });
+try {
+    console.log(argv);
+    var options = new NapijsOptions(argv);
+    napijs(options)
+        .then(()=>{
+        })
+        .catch((err)=>{
+            console.error('Error occurred: ', err);
+        });
+} catch(err){
+    console.error('Ups! Unexpected exception occurred... :(  \n', err);
+}

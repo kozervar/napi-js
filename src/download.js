@@ -65,8 +65,13 @@ var parseHttpResponse = function (options, filesWithHash) {
 
 function download(o) {
     return new Promise((resolve, reject) => {
-        glob(o.files)
-            .then((files)=> generateFileHashes(o, files))
+        var promise;
+        if(o.file.length > 0 ) {
+            promise = generateFileHashes(o, [o.file]);
+        } else {
+            promise = glob(o.files);
+        }
+        promise
             .then((fileHashes)=> makeHttpRequests(o, fileHashes))
             .then((filesWithHash)=> parseHttpResponse(o, filesWithHash))
             .then((responses)=> {
