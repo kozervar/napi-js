@@ -16,6 +16,7 @@ class NapijsOptions {
         this.lang = argv.l;
         this.verbose = argv.verbose;
         this.files = argv.f;
+        this.extension = 'srt';
     }
 }
 

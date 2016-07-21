@@ -25,7 +25,7 @@ function parseAndSaveFile(options, fileWithHash, resolve, reject) {
         if (result.result.subtitles.length === 1) {
             const subsFileName = path.join(
                 path.dirname(fileWithHash.file),
-                path.basename(fileWithHash.file, path.extname(fileWithHash.file)) + '.txt'
+                path.basename(fileWithHash.file, path.extname(fileWithHash.file)) + '.' + options.extension
             );
             if (options.verbose) {
                 logger.info('Saving file [ %s ]', subsFileName);

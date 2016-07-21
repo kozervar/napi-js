@@ -1,6 +1,8 @@
 # disable example video and downloaded subtitles
 *.mp4
+*.mkv
 *.txt
+*.srt
 
 # Created by https://www.gitignore.io
 
