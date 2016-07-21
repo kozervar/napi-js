@@ -23,7 +23,7 @@ function parseAndSaveFile(options, fileWithHash, resolve, reject) {
             return reject({err: 'No subtitles found in response for file ' + fileWithHash.file, fileWithHash: fileWithHash});
         }
         if (result.result.subtitles.length === 1) {
-            fileManager(options, fileWithHash, result.result.subtitles[0])
+            fileManager.saveSubtitles(options, fileWithHash, result.result.subtitles[0])
                 .then(response => resolve(response))
                 .catch(err => reject({err: err, fileWithHash: fileWithHash}));
         } else {

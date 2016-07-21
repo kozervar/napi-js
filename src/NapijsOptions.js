@@ -2,7 +2,7 @@
  * Created by kozervar on 2016-07-21.
  */
 'use strict';
-
+import _ from 'underscore';
 const DEFAULT_SUBS_EXT = '.srt';
 
 /**
@@ -18,11 +18,14 @@ class NapijsOptions {
         this.lang = argv.l || 'POL';
         this.verbose = argv.verbose || false;
         this.file = argv.file || '';
+        if(_.isString(argv.f)) {
+            argv.f = [argv.f];
+        }
         this.files = argv.f || ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg'];
         this.extension = argv.e || DEFAULT_SUBS_EXT;
-        this.overwrite = argv.o || true;
+        this.overwrite = argv.save;
 
-        this.watchPath = argv.p || ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg'];
+        this.watchPath = argv.path || ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg'];
 
         this.validate();
     }

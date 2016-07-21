@@ -10,14 +10,15 @@ import path from 'path';
 import _ from 'underscore';
 
 export default function (options) {
-    if (options.verbose)
-        logger.info('Watching path: %s', options.watchPath);
     var paths = [];
     for (var p of options.files) {
-        paths.push(options.watchPath + '/**/' + p);
+        paths.push(options.watchPath + '/' + p);
     }
+    if (options.verbose)
+        logger.info('Paths: %s', paths);
+    logger.info('Watching...');
+
     var watcher = chokidar.watch(paths, {
-        // ignored: /[\/\\]\./,
         persistent: true,
         ignoreInitial: true,
         awaitWriteFinish: true

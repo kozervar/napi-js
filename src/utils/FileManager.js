@@ -18,13 +18,13 @@ var fileExists = function (filename) {
     }
 };
 
-function fileManager(options, fileWithHash, subtitles, resolve, reject) {
+function checkIfFileExists(options, fileWithHash, resolve, reject) {
     const subsFileName = path.join(
         path.dirname(fileWithHash.file),
         path.basename(fileWithHash.file, path.extname(fileWithHash.file)) + options.extension
     );
     if(fileExists(subsFileName)) {
-        if(!_.isBoolean(options.overwrite)) {
+        if(!options.overwrite) {
             if (options.verbose) {
                 logger.info('File [ %s ] exist. Nothing to do!', subsFileName);
             }
@@ -46,6 +46,17 @@ function fileManager(options, fileWithHash, subtitles, resolve, reject) {
         }
         fs.renameSync(subsFileName, modifiedSubsFileName);
     }
+    return resolve(fileWithHash);
+}
+
+function fileManager(options, fileWithHash, subtitles, resolve, reject) {
+    if(fileWithHash.subtitlesPresent) {
+        resolve(fileWithHash);
+    }
+    const subsFileName = path.join(
+        path.dirname(fileWithHash.file),
+        path.basename(fileWithHash.file, path.extname(fileWithHash.file)) + options.extension
+    );
 
     if (options.verbose) {
         logger.info('Saving file [ %s ]', subsFileName);
@@ -70,6 +81,14 @@ function fileManager(options, fileWithHash, subtitles, resolve, reject) {
     file.end();
 }
 
-export default function(options, fileWithHash, subtitles){
+var saveSubtitles = function (options, fileWithHash, subtitles){
     return new Promise((resolve,reject)=>fileManager(options,fileWithHash,subtitles,resolve,reject));
+};
+var subtitleExists = function (options, fileWithHash){
+    return new Promise((resolve,reject)=>checkIfFileExists(options,fileWithHash,resolve,reject));
+};
+
+export default {
+    saveSubtitles : saveSubtitles,
+    subtitleExists : subtitleExists
 }
