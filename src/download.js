@@ -4,38 +4,75 @@
 'use strict';
 import { logger, hash, glob, HttpRequest, XML2JSON } from './utils';
 
-function download(files){
-    return new Promise((resolve,reject) => {
-        glob(files).then((files)=> {
-                var promises = [];
-                for (var file of files) {
-                    promises.push(hash(file));
-                }
-                return Promise.all(promises);
-            })
-            .then((fileHashes)=> {
-                var promises = [];
-                for(var fh of fileHashes){
-                    logger.debug('Downloading subtitiles for file [%s] with hash [%s]', fh.file, fh.hash);
-                    var httpRequest = new HttpRequest(fh);
-                    promises.push(httpRequest.request());
-                }
-                return Promise.all(promises);
-            })
-            .then((filesWithHash)=> {
-                var promises = [];
-                for(var fileWithHash of filesWithHash){
-                    promises.push(XML2JSON(fileWithHash));
-                }
-                return Promise.all(promises);
-            })
+
+var generateFileHashes = function (options, files) {
+    if(options.verbose) {
+        logger.info('--------------------------------');
+        logger.info('Generate file hash');
+        logger.info('--------------------------------');
+    }
+    if (files.length === 0)
+        logger.info('No files found!');
+    else if (options.verbose) {
+        logger.info('Files found: ');
+        for (var file of files) {
+            logger.info(file);
+        }
+    }
+
+    var promises = [];
+    for (var file of files) {
+        promises.push(hash(file));
+    }
+    return Promise.all(promises);
+};
+
+var makeHttpRequests = function (options, fileHashes) {
+    if(options.verbose) {
+        logger.info('--------------------------------');
+        logger.info('Make HTTP request');
+        logger.info('--------------------------------');
+    }
+    var promises = [];
+    for (var fh of fileHashes) {
+        if (options.verbose) {
+            logger.info('Downloading subtitles for file [%s] with hash [%s]', fh.file, fh.hash);
+        }
+        var httpRequest = new HttpRequest(options, fh);
+        promises.push(httpRequest.request());
+    }
+    return Promise.all(promises);
+};
+
+var parseHttpResponse = function (options, filesWithHash) {
+    if(options.verbose) {
+        logger.info('--------------------------------');
+        logger.info('Parse HTTP response');
+        logger.info('--------------------------------');
+    }
+    var promises = [];
+    for (var fileWithHash of filesWithHash) {
+        var p = XML2JSON(options, fileWithHash).catch((err) => {
+            if (options.verbose) {
+                logger.info('Error in HTTP response: ', err.err);
+            }
+            return err.fileWithHash;
+        });
+        promises.push(p);
+    }
+    return Promise.all(promises);
+};
+
+function download(o) {
+    return new Promise((resolve, reject) => {
+        glob(o.files)
+            .then((files)=> generateFileHashes(o, files))
+            .then((fileHashes)=> makeHttpRequests(o, fileHashes))
+            .then((filesWithHash)=> parseHttpResponse(o, filesWithHash))
             .then((responses)=> {
-                logger.debug('napijs finished');
                 resolve(responses);
             })
             .catch(err=> {
-                logger.error(err);
-                logger.debug('napijs finished with errors!');
                 reject(err);
             });
     });

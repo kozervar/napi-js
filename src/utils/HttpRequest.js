@@ -6,20 +6,26 @@ import querystring from 'querystring';
 import http from 'http';
 
 class HttpRequest {
-    constructor(fileWithHash){
+    constructor(options, fileWithHash){
         this.fileWithHash = fileWithHash;
         this.postData = querystring.stringify({
-            'mode': '32wireshark napipro',
-            'client': 'AutoMove',
+            //'mode': '32',
+            //'client': 'AutoMove',
+            //'client_ver': '1.0',
+            //'downloaded_subtitles_id': this.fileWithHash.hash,
+            //'downloaded_subtitles_lang': 'PL',
+            //'downloaded_subtitles_txt': '2',
+            //'advert_type': 'flashAllowed',
+            //'video_info_hash': this.fileWithHash.hash,
+            //'nazwa_pliku': this.fileWithHash.file,
+            //'rozmiar_pliku_bajty': this.fileWithHash.bytes,
+            //'the': 'end'
+            'downloaded_subtitles_lang': options.lang,
+            'downloaded_subtitles_txt': '1',
             'client_ver': '2.2.0.2399',
             'downloaded_subtitles_id': this.fileWithHash.hash,
-            'downloaded_subtitles_lang': 'PL',
-            'downloaded_subtitles_txt': '2',
-            'advert_type': 'flashAllowed',
-            'video_info_hash': this.fileWithHash.hash,
-            'nazwa_pliku': this.fileWithHash.file,
-            'rozmiar_pliku_bajty': this.fileWithHash.bytes,
-            'the': 'end'
+            'client': 'Napiprojekt',
+            'mode': '1'
         });
         this.postOptions = {
             host: 'www.napiprojekt.pl',

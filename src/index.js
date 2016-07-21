@@ -10,5 +10,5 @@ download(['./examples/*.mkv'])
         logger.info('Subtitles saved!');
     })
     .catch(err=> {
-        logger.debug('napijs finished with errors!');
+        console.error('napijs finished with errors: ', err);
     });

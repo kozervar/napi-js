@@ -8,6 +8,7 @@ var rename = require('gulp-rename');
 var clean = require('gulp-clean');
 var nodemon = require('gulp-nodemon');
 var Cache = require('gulp-file-cache');
+var sourcemaps = require('gulp-sourcemaps');
 
 var cache = new Cache();
 
@@ -30,13 +31,13 @@ gulp.task('clean', function () {
 
 gulp.task('compile', function () {
     var stream = gulp.src(paths.babel)
-        .pipe(cache.filter())
+        //.pipe(cache.filter())
+        .pipe(sourcemaps.init())
         .pipe(babel({
             presets: ['es2015']
-        }))/*.on('error', function (err) {
-            console.error(err.stack)
-        })*/
-        .pipe(cache.cache())
+        }))
+        .pipe(sourcemaps.write())
+        //.pipe(cache.cache())
         .pipe(gulp.dest(paths.dist));
     return stream;
 });

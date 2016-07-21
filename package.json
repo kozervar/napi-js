@@ -24,7 +24,7 @@
     "url": "http://github.com/kozervar/napi-js/issues"
   },
   "bin": {
-    "napijs": "./bin/cmd.js"
+    "napijs": "./dist/cmd.js"
   },
   "main": "napi-js.js",
   "files": [
@@ -58,6 +58,7 @@
     "gulp-file-cache": "0.0.1",
     "gulp-nodemon": "^2.1.0",
     "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
     "underscore": "^1.8.3"
   }
 }
