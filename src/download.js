@@ -4,11 +4,15 @@
 'use strict';
 import { logger, hash, glob, HttpRequest, XML2JSON, fileManager } from './utils';
 
+/**
+ * Generate MD5 partial hash for provided files
+ * @param {NapijsOptions} options
+ * @param files
+ * @returns {Promise}
+ */
 var generateFileHashes = function (options, files) {
     if(options.verbose) {
-        logger.info('--------------------------------');
-        logger.info('Generate file hash');
-        logger.info('--------------------------------');
+        logger.info('Generating files hash...');
     }
     if (files.length === 0)
         logger.info('No files found!');
@@ -25,8 +29,16 @@ var generateFileHashes = function (options, files) {
     }
     return Promise.all(promises);
 };
-
+/**
+ * Check if files exist. If --save flag is on then rename existing file
+ * @param {NapijsOptions} options
+ * @param fileWithHashes
+ * @returns {Promise}
+ */
 var checkSubtitleFiles = function (options, fileWithHashes) {
+    if(options.verbose) {
+        logger.info('Checking existing subtitles...');
+    }
     var promises = [];
     for (var file of fileWithHashes) {
         promises.push(fileManager.subtitleExists(options, file));
@@ -34,11 +46,15 @@ var checkSubtitleFiles = function (options, fileWithHashes) {
     return Promise.all(promises);
 };
 
+/**
+ * Perform HTTP request to Napiprojekt server
+ * @param {NapijsOptions} options
+ * @param fileHashes
+ * @returns {Promise}
+ */
 var makeHttpRequests = function (options, fileHashes) {
     if(options.verbose) {
-        logger.info('--------------------------------');
-        logger.info('Make HTTP request');
-        logger.info('--------------------------------');
+        logger.info('Performing HTTP requests...');
     }
     var promises = [];
     for (var fileWithHash of fileHashes) {
@@ -53,11 +69,15 @@ var makeHttpRequests = function (options, fileHashes) {
     return Promise.all(promises);
 };
 
+/**
+ * Parse HTTP response from Napiprojekt server. Format XML response to JSON and save subtitles to file.
+ * @param {NapijsOptions} options
+ * @param filesWithHash
+ * @returns {Promise}
+ */
 var parseHttpResponse = function (options, filesWithHash) {
     if(options.verbose) {
-        logger.info('--------------------------------');
-        logger.info('Parse HTTP response');
-        logger.info('--------------------------------');
+        logger.info('Parsing HTTP responses...');
     }
     var promises = [];
     for (var fileWithHash of filesWithHash) {
@@ -74,6 +94,18 @@ var parseHttpResponse = function (options, filesWithHash) {
     return Promise.all(promises);
 };
 
+/**
+ * Main download function. Responsible for downloading subtitles from Napiprojekt server
+ * Steps:
+ * - find files provided in options
+ * - generate partial MD5 hash for each file
+ * - check if subtitles already exists. Rename old subtitles file if one exist
+ * - call Napiprojekt server
+ * - parse XML response to JSON format and save subtitles to disk
+ *
+ * @param {NapijsOptions} o options
+ * @returns {Promise}
+ */
 function download(o) {
     return new Promise((resolve, reject) => {
         var promise;

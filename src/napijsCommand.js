@@ -16,26 +16,27 @@ var builder = function(yargs){
     return yargs
         .option('l', {
             alias: 'language',
-            description: 'Language. Available: POL, ENG',
-            default: CONST.LANGUAGE.PL
+            description: 'Set subtitles language. Available languages: POL, ENG',
+            default: CONST.LANGUAGE.PL,
+            choices: CONST.LANGUAGE_ARRAY
         })
         .option('verbose', {
-            description: 'verbose output',
+            description: 'Show output',
             default: false
         })
         .option('f', {
             array: true,
-            description: 'An array of files separated by space char. Glob expression allowed. For more information visit: https://github.com/isaacs/node-glob',
+            description: 'An array of files separated by space char. Glob expression allowed.\nFor more information visit: https://github.com/isaacs/node-glob',
             alias: 'files',
             default: ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg']
         })
         .option('file', {
             array: false,
-            description: 'Single file'
+            description: 'Path to single file. If provided then --files argument is ignored'
         })
         .option('s', {
             boolean: true,
-            description: 'Overwrite subtitle file if one exists',
+            description: 'Overwrite subtitles file if one exist',
             alias: 'save'
         })
         ;

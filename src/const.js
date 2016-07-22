@@ -7,6 +7,7 @@ const CONST = {
     LANGUAGE: {
         PL : 'POL',
         ENG : 'ENG'
-    }
+    },
+    LANGUAGE_ARRAY: ['POL','ENG']
 };
 export default CONST

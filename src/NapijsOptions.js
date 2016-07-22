@@ -3,7 +3,9 @@
  */
 'use strict';
 import _ from 'underscore';
+const DEFAULT_LANG = 'POL';
 const DEFAULT_SUBS_EXT = '.srt';
+const DEFAULT_GLOB_EXT = ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg'];
 
 /**
  * Options passed to napijs
@@ -15,17 +17,15 @@ class NapijsOptions {
      * @param argv - yargs argv
      */
     constructor(argv) {
-        this.lang = argv.l || 'POL';
+        this.lang = argv.language || DEFAULT_LANG;
         this.verbose = argv.verbose || false;
         this.file = argv.file || '';
-        if(_.isString(argv.f)) {
-            argv.f = [argv.f];
-        }
-        this.files = argv.f || ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg'];
-        this.extension = argv.e || DEFAULT_SUBS_EXT;
+
+        this.files = argv.files || DEFAULT_GLOB_EXT;
+        this.extension = DEFAULT_SUBS_EXT;
         this.overwrite = argv.save;
 
-        this.watchPath = argv.path || ['*.mkv', '*.avi', '*.mp4', '*.mpeg', '*.wmv', '*.rmvb', '*.mov', '*.mpg'];
+        this.watchPath = argv.path || DEFAULT_GLOB_EXT;
 
         this.validate();
     }
@@ -35,6 +35,9 @@ class NapijsOptions {
         if(!this.extension.match(regexp)) {
             console.error('Subtitles extension is not correct');
             this.extension = DEFAULT_SUBS_EXT;
+        }
+        if(_.isString(this.files)) {
+            this.files = [this.files];
         }
     }
 }
