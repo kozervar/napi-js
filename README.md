@@ -8,7 +8,7 @@ A Node.js library for downloading movie subtitles using the [NapiProjekt](http:/
 npm install napi-js
 ```
 
-Next just do something like this (see examples directory):
+Next just do something like this:
 
 ```javascript
 var napijs = require('napi-js');
@@ -87,11 +87,11 @@ It's also possible to use `napijs` as a command line tool. To do so, install it 
 ```
 
 Support
--------
+======
 
 I strongly suggest to support [Napiprojekt](http://www.napiprojekt.pl/wsparcie). They do a great job!
 
 License
---------
+=======
 
 Copyright 2016 Marcin Kozaczyk MIT License (enclosed).
