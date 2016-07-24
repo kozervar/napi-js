@@ -1,6 +1,6 @@
 {
   "name": "napi-js",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "private": false,
   "description": "A library for downloading movie subtitles using the NapiProjekt API.",
   "homepage": "https://github.com/kozervar/napi-js",
