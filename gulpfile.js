@@ -32,11 +32,11 @@ gulp.task('clean', function () {
 gulp.task('compile', function () {
     var stream = gulp.src(paths.babel)
         //.pipe(cache.filter())
-        .pipe(sourcemaps.init())
+        //.pipe(sourcemaps.init())
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(sourcemaps.write())
+        //.pipe(sourcemaps.write())
         //.pipe(cache.cache())
         .pipe(gulp.dest(paths.dist));
     return stream;
