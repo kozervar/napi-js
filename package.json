@@ -24,14 +24,12 @@
     "url": "http://github.com/kozervar/napi-js/issues"
   },
   "bin": {
-    "napijs": "./dist/cmd.js"
+    "napijs": "dist/cmd.js"
   },
-  "main": "napi-js.js",
+  "main": "dist/index.js",
   "files": [
     "LICENSE",
-    "languages.js",
-    "napi-js.js",
-    "bin/*"
+    "dist/*"
   ],
   "repository": {
     "type": "git",
