@@ -50,7 +50,7 @@ var NapijsOptions = function () {
     _createClass(NapijsOptions, [{
         key: 'validate',
         value: function validate() {
-            var regexp = new RegExp(/^.[a-z4]*$/, 'gmi');
+            var regexp = new RegExp(/^.[a-z4]*$/gmi);
             if (!this.extension.match(regexp)) {
                 console.error('Subtitles extension is not correct');
                 this.extension = DEFAULT_SUBS_EXT;
